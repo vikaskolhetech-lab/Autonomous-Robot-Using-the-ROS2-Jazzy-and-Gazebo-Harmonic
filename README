@@ -1,0 +1,298 @@
+Autonomous Robot Using ROS2 Jazzy and Gazebo Harmonic
+
+A complete implementation of an Autonomous Navigation Robot using ROS2 Jazzy, Gazebo Harmonic, SLAM Toolbox, and Nav2 Stack. This project demonstrates how a robot can create a map of its environment, localize itself, avoid obstacles, and autonomously navigate to a target location.
+
+The project is divided into two major parts:
+
+Obstacle Avoidance Robot → Robot detects and avoids obstacles automatically.
+Autonomous Navigation Robot → Robot creates a map, understands the environment, and navigates autonomously to a goal location.
+📌 Project Overview
+
+This project focuses on building an intelligent robot capable of:
+
+✅ Simulating robot movement in Gazebo
+✅ Creating maps using SLAM
+✅ Saving and loading maps
+✅ Localizing itself in a known environment
+✅ Planning paths autonomously
+✅ Reaching destination points automatically
+
+🛠️ Technologies Used
+ROS2 Jazzy
+Gazebo Harmonic
+SLAM Toolbox
+Navigation2 (Nav2)
+RViz2
+TurtleBot3 Burger
+Ubuntu Linux
+✨ Features
+Autonomous obstacle avoidance
+Real-time SLAM mapping
+Saved map navigation
+Localization using AMCL
+Path planning with Nav2
+Goal-based navigation in RViz
+LiDAR-based environment understanding
+🏗️ System Architecture
+Gazebo Simulation
+        ↓
+Robot Sensors (LiDAR + Odometry)
+        ↓
+SLAM Toolbox
+        ↓
+Map Creation
+        ↓
+Map Saving
+        ↓
+Localization (AMCL)
+        ↓
+Nav2 Stack
+        ↓
+Path Planning
+        ↓
+Autonomous Navigation
+📂 Project Workflow
+Gazebo World
+      ↓
+Robot Sensors
+      ↓
+SLAM Mapping
+      ↓
+Save Map
+      ↓
+Localization
+      ↓
+Navigation (Nav2)
+      ↓
+Autonomous Goal Movement
+⚙️ Installation
+Step 1: Update System
+sudo apt update
+sudo apt upgrade -y
+Step 2: Install Required Packages
+
+Install Navigation2:
+
+sudo apt install ros-jazzy-navigation2 ros-jazzy-nav2-bringup
+
+Install SLAM Toolbox:
+
+sudo apt install ros-jazzy-slam-toolbox
+
+Install TurtleBot3 packages:
+
+sudo apt install ros-jazzy-turtlebot3*
+Step 3: Source ROS2 Environment
+source /opt/ros/jazzy/setup.bash
+
+(Optional: Add permanently)
+
+echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+Step 4: Verify Installation
+
+Check Nav2 packages:
+
+ros2 pkg list | grep nav2
+
+Expected output:
+
+nav2_amcl
+nav2_bringup
+nav2_controller
+nav2_costmap_2d
+...
+🗺️ Phase 1: SLAM Mapping
+Launch TurtleBot3 in Gazebo
+Terminal 1
+source /opt/ros/jazzy/setup.bash
+
+export TURTLEBOT3_MODEL=burger
+
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+Expected:
+
+✅ Gazebo opens
+✅ Robot appears
+
+Start SLAM Mapping
+Terminal 2
+source /opt/ros/jazzy/setup.bash
+
+export TURTLEBOT3_MODEL=burger
+
+ros2 launch slam_toolbox online_async_launch.py
+
+Expected:
+
+✅ SLAM starts
+
+Open RViz
+Terminal 3
+source /opt/ros/jazzy/setup.bash
+
+export TURTLEBOT3_MODEL=burger
+
+ros2 launch turtlebot3_navigation2 navigation2.launch.py use_sim_time:=True
+
+Expected in RViz:
+
+✅ Laser Scan
+✅ Robot Model
+✅ Map Generation
+
+Move Robot to Build Map
+Terminal 4
+source /opt/ros/jazzy/setup.bash
+
+export TURTLEBOT3_MODEL=burger
+
+ros2 run turtlebot3_teleop teleop_keyboard
+Keyboard Controls
+Key	Action
+i	Move Forward
+,	Move Backward
+j	Turn Left
+l	Turn Right
+k	Stop
+Goal
+Move robot slowly
+Cover the entire environment
+Generate a complete map
+💾 Phase 2: Save the Map
+Terminal 5
+
+Create maps folder:
+
+mkdir -p ~/maps
+cd ~/maps
+
+Save map:
+
+ros2 run nav2_map_server map_saver_cli -f ~/maps/my_map
+
+Expected output:
+
+Map saved successfully
+
+Generated files:
+
+my_map.pgm
+my_map.yaml
+
+Verify:
+
+ls ~/maps
+🧭 Phase 3: Autonomous Navigation
+Stop Previous Processes
+
+Press:
+
+CTRL + C
+
+Close all terminals.
+
+Launch Gazebo Again
+Terminal 1
+source /opt/ros/jazzy/setup.bash
+
+export TURTLEBOT3_MODEL=burger
+
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+Expected:
+
+✅ Gazebo opens
+✅ Robot appears
+
+Start Navigation with Saved Map
+Terminal 2
+source /opt/ros/jazzy/setup.bash
+
+export TURTLEBOT3_MODEL=burger
+
+ros2 launch turtlebot3_navigation2 navigation2.launch.py \
+map:=/home/kolhesatish-sde/maps/my_map.yaml \
+use_sim_time:=True
+
+Expected:
+
+✅ Navigation Stack starts
+✅ AMCL localization starts
+✅ RViz opens automatically
+
+Set Initial Pose in RViz
+Click 2D Pose Estimate
+Select robot position
+Drag arrow in robot direction
+
+This tells the robot:
+
+“You are here.”
+
+Send Navigation Goal
+Click Nav2 Goal
+Select destination
+Drag arrow direction
+
+Expected:
+
+✅ Path planning starts
+✅ Robot avoids obstacles
+✅ Robot moves autonomously
+✅ Goal reached successfully
+
+📊 Expected Results
+Robot successfully creates a map
+Saved map loads properly
+Localization works using AMCL
+Robot plans shortest path
+Autonomous navigation works
+Robot reaches goal without collision
+📚 Learning Outcomes
+
+After completing this project, you will learn:
+
+🔹 SLAM
+
+Simultaneous Localization and Mapping for environment mapping.
+
+🔹 Localization
+
+Robot estimates its current position using sensor data.
+
+🔹 Costmap
+
+Robot identifies obstacles and free space.
+
+🔹 Path Planning
+
+Robot calculates the safest and shortest route.
+
+🔹 Navigation2 (Nav2)
+
+Complete ROS2 autonomous navigation stack.
+
+🔹 Robot Simulation
+
+Practical robot simulation using Gazebo Harmonic.
+
+📸 Demo (Recommended)
+
+Add screenshots or GIFs here:
+
+/docs/images/mapping.png
+/docs/images/navigation.png
+/docs/videos/demo.gif
+📌 Future Improvements
+Custom robot model integration
+Dynamic obstacle avoidance
+Multi-room autonomous navigation
+AI-based path optimization
+Real robot deployment
+👨‍💻 Author
+
+Vikas Kolhe
+STEM Innovation Engineer | Robotics & Embedded Systems Enthusiast
+Passionate about ROS2, Autonomous Robotics, Embedded Systems, and AI-based Robotics.
